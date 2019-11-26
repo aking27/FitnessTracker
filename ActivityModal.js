@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, TouchableWithoutFeedback, Dimensions, TextInput, StyleSheet } from 'react-native';
 import base64 from 'base-64';
 import Button from './Button';
+import ActivityPicker from './ActivityPicker'
 
 class ActivityModal extends React.Component {
   constructor(props) {
@@ -9,9 +10,10 @@ class ActivityModal extends React.Component {
     this.state = {
       caloriesInput: 0.0,
       durationInput: 0.0,
-      nameInput: "",
-      activityID: ""
+      activityID: "",
+      activity: "Run"
     }
+    this.changeActivity = this.changeActivity.bind(this);
   }
   async postActivities(){
     var myHeaders = new Headers();
@@ -19,7 +21,7 @@ class ActivityModal extends React.Component {
     myHeaders.append("x-access-token", this.props.token);
     myHeaders.append("Authorization", 'Basic ' + base64.encode(this.props.username + ":" + this.props.password));
 
-    var raw = "{\n	\"name\": \"" + this.state.nameInput + "\",\n	\"calories\" : " + this.state.caloriesInput + ",\n	\"duration\": " + this.state.durationInput + "\n}";
+    var raw = "{\n	\"name\": \"" + this.state.activity + "\",\n	\"calories\" : " + this.state.caloriesInput + ",\n	\"duration\": " + this.state.durationInput + "\n}";
 
     var requestOptions = {
       method: 'POST',
@@ -38,22 +40,8 @@ class ActivityModal extends React.Component {
       alert(error);
     }
   }
-
-  async runPress(){
-    await this.setState({nameInput: "Running"});
-    await this.postActivities();
-  }
-  async walkPress(){
-    await this.setState({nameInput: "Walking"});
-    await this.postActivities();
-  }
-  async bikePress(){
-    await this.setState({nameInput: "Cylcing"});
-    await this.postActivities();
-  }
-  async swimPress(){
-    await this.setState({nameInput: "Swimming"});
-    await this.postActivities();
+  changeActivity(childData){
+    this.setState({activity: childData});
   }
   render() {
     const styles = StyleSheet.create({
@@ -114,11 +102,8 @@ class ActivityModal extends React.Component {
             placeholder= "Calories Burned"/>
             <TextInput style={styles.input}  textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({durationInput: text})}
             placeholder= "Duration of Exercise (min.)"/>
-            <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add a Run'} onPress={() => this.runPress()}/>
-            <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add a Walk'} onPress={() => this.walkPress()}/>
-            <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add a Bike Ride'} onPress={() => this.bikePress()}/>
-            <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add a Swim'} onPress={() => this.swimPress()}/>
-            <Button buttonStyle={styles.closeButton} textStyle={{fontSize: 25}} text={'✕'} onPress={() => this.props.hide()}/>
+            <ActivityPicker changeActivity = {this.changeActivity}/>
+            <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add Activity'} onPress={() => this.postActivities()}/>
           </View>
         </View>
       )

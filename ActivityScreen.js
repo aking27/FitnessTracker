@@ -20,7 +20,6 @@ class ActivityScreen extends React.Component {
   }
   showModal() {
     this.setState({showModal: true});
-    // console.log(this.state.showModal)
   }
 
   hideModal() {
@@ -28,7 +27,6 @@ class ActivityScreen extends React.Component {
   }
   showEditModal() {
     this.setState({editModal: true});
-    // console.log(this.state.editModal)
   }
 
   hideEditModal() {
@@ -68,18 +66,33 @@ class ActivityScreen extends React.Component {
         marginTop: 10,
         borderRadius: 10,
         padding: 20
+      },
+      buttons: {
+        backgroundColor: 'dodgerblue', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        padding: 15, 
+        width: 150, 
+        borderRadius: 10, 
+        marginTop: 30
+      },
+      backButton: {
+        backgroundColor: 'red', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        padding: 15, 
+        width: 150, 
+        borderRadius: 10, 
+        marginTop: 15, 
+        marginBottom: 40
       }
     });
+
     let times = [];
     for(let j = 0; j < this.props.activities.length; j++){
-      // let thisTime = this.props.activities[j].date;
-      // let myDate = new Date(thisTime).toLocaleString("en-US", {timeZone: "America/Chicago"});
-      // myDate = new Date(myDate);
       let myDate = getParsedDate(this.props.activities[j].date);
       times.push(myDate);
     }
-
-    // console.log(this.props.activities.length);
 
     let activityRows = [];
 
@@ -111,9 +124,9 @@ class ActivityScreen extends React.Component {
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#4E5851'}}>
         <Text style={styles.welcome}>Activity Hub</Text>
         <Text style={styles.activityBox}>{activityRows}</Text>
-        <Button buttonStyle={{backgroundColor: 'dodgerblue', alignItems: 'center', justifyContent: 'center', padding: 10, width: 150, borderRadius: 10, marginTop: 30}} textStyle={{color: '#ffffff'}} text={'Add Activity'} onPress={() => this.showModal()}/>
-        <Button buttonStyle={{backgroundColor: 'dodgerblue', alignItems: 'center', justifyContent: 'center', padding: 10, width: 150, borderRadius: 10, marginTop: 15}} textStyle={{color: '#ffffff'}} text={'Edit Entries'} onPress={() => this.showEditModal()}/>
-        <Button buttonStyle={{backgroundColor: 'red', alignItems: 'center', justifyContent: 'center', padding: 10, width: 150, borderRadius: 10, marginTop: 15}} textStyle={{color: '#ffffff'}} text={'Go Back'} onPress={() => this.activityGoBack()}/>
+        <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Add Activity'} onPress={() => this.showModal()}/>
+        {/* <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Edit Entries'} onPress={() => this.showEditModal()}/> */}
+        <Button buttonStyle={styles.backButton} textStyle={{color: '#ffffff'}} text={'Go Back'} onPress={() => this.activityGoBack()}/>
         <ActivityModal width={300} height={600} show={this.state.showModal} hide={() => this.hideModal()}
                   firstName = {this.props.firstName}
                   lastName = {this.props.lastName}

@@ -20,10 +20,26 @@ class App extends React.Component {
       goalDailyCarbohydrates: "",
       goalDailyFat: "",
       goalDailyProtein: "",
-      viewOne: true, // Profile View
+      viewOne: false, // Profile View
       activities: [],
       meals: [],
-      signupPage: true
+      signupPage: true,
+      // foods: [], // changing this to food sorted by meal
+      breakfastID: [],
+      lunchID: [],
+      dinnerID: [],
+      snackID: [],
+      currMealID: "",
+      breakfastArray: [],
+      lunchArray: [],
+      dinnerArray: [],
+      snackArray: [],
+      concatBreakfast: false,
+      concatLunch: false,
+      concatDinner: false,
+      concatSnack: false,
+      dayViewing: "",
+      loggedIn: false
     }
     this.goBack = this.goBack.bind(this);
     this.goBackSignup = this.goBackSignup.bind(this);
@@ -52,6 +68,20 @@ class App extends React.Component {
       console.log(error);
     }
   }
+//   {    ---- get the information from meals -- id is pretty important -- maybe an array? -- concat
+//     "meals": [
+//         {
+//             "date": "2019-11-23T22:30:03.746351",
+//             "id": 163,
+//             "name": "Snack"
+//         },
+//         {
+//             "date": "2019-11-23T23:54:28.267410",
+//             "id": 177,
+//             "name": "Breakfast"
+//         }
+//     ]
+// }
   async getMeals(){ //get user meals
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -70,17 +100,125 @@ class App extends React.Component {
       let response = await fetch('https://mysqlcs639.cs.wisc.edu/meals', requestOptions);
       let result = await response.json();
       this.setState({meals: result.meals});
-      console.log(result.meals);
     } catch {
       console.log(error);
     }
   }
+  async getFoods(){ // the message that is created is similar to meals in that it is in an array
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("x-access-token", this.state.token);
+    myHeaders.append("Authorization", 'Basic ' + base64.encode(this.state.username + ":" + this.state.password));
 
+    var raw = "";
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    
+    try{
+      let response = await fetch('https://mysqlcs639.cs.wisc.edu/meals/' + this.state.currMealID + '/foods', requestOptions);
+      let result = await response.json();
+      // console.log(result.foods);
+      if(this.state.concatBreakfast){ // need to clear the array contents before concatenating them -- array just keeps getting bigger
+        // this.setState({breakfastArray: []}); // need to reset the array to be populated again
+        this.setState({breakfastArray: this.state.breakfastArray.concat(result.foods)});
+      } else if (this.state.concatLunch) {
+        // this.setState({lunchArray: []});
+        this.setState({lunchArray: this.state.lunchArray.concat(result.foods)});
+      } else if (this.state.concatDinner) {
+        // this.setState({dinnerArray: []});
+        this.setState({dinnerArray: this.state.dinnerArray.concat(result.foods)});
+      } else if (this.state.concatSnack) {
+        // this.setState({snackArray: []});
+        // console.log("Result");
+        
+        // console.log("array");
+        // console.log(this.state.snackArray);
+        this.setState({snackArray: this.state.snackArray.concat(result.foods)});
+      }
+      
+    } catch {
+      console.log(error);
+    }
+  }
+  getIdByMealName(){
+    for(let i = 0; i < this.state.meals.length; i++){ //going through the meals and sorting the IDs by meal type (name)
+      if(this.state.meals[i].name == "Breakfast"){ //then grab the ID
+        this.setState({breakfastID: this.state.breakfastID.concat(this.state.meals[i].id)});
+      } else if (this.state.meals[i].name == "Lunch"){
+        // console.log("getIdbymealname")
+        this.setState({lunchID: this.state.lunchID.concat(this.state.meals[i].id)});
+      } else if (this.state.meals[i].name == "Dinner"){
+        this.setState({dinnerID: this.state.dinnerID.concat(this.state.meals[i].id)});
+      } else if (this.state.meals[i].name == "Snack"){
+        this.setState({snackID: this.state.snackID.concat(this.state.meals[i].id)});
+      }
+    }
+  }
+  async getFoodForEachID(){
+    for(let i = 0; i < this.state.breakfastID.length; i++){
+      // This will help sort out the foods by meal -- further sorted by date
+      this.setState({concatBreakfast: true});
+      this.setState({concatLunch: false});
+      this.setState({concatDinner: false});
+      this.setState({concatSnack: false});
+
+      this.setState({currMealID: this.state.breakfastID[i]});
+      await this.getFoods(); // getting the foods for each meal ID
+    }
+    for(let i = 0; i < this.state.lunchID.length; i++){
+      this.setState({concatBreakfast: false});
+      this.setState({concatLunch: true});
+      this.setState({concatDinner: false});
+      this.setState({concatSnack: false});
+      // console.log("lunch loop: " + this.state.lunchID[i])
+      this.setState({currMealID: this.state.lunchID[i]});
+      await this.getFoods();
+    }
+    for(let i = 0; i < this.state.dinnerID.length; i++){
+      this.setState({concatBreakfast: false});
+      this.setState({concatLunch: false});
+      this.setState({concatDinner: true});
+      this.setState({concatSnack: false});
+
+      this.setState({currMealID: this.state.dinnerID[i]});
+      await this.getFoods();
+      
+    }for(let i = 0; i < this.state.snackID.length; i++){
+      this.setState({concatBreakfast: false});
+      this.setState({concatLunch: false});
+      this.setState({concatDinner: false});
+      this.setState({concatSnack: true}); 
+
+      this.setState({currMealID: this.state.snackID[i]});
+      await this.getFoods();
+    }
+  }
+  async createMealModal(){ //creating a meal in the meal modal
+    this.setState({breakfastArray: []}); //reset all the meal arrays
+    this.setState({lunchArray: []});
+    this.setState({dinnerArray: []});
+    this.setState({snackArray: []});
+
+    this.setState({breakfastID: []}); // restet all the IDs too
+    this.setState({lunchID: []});
+    this.setState({dinnerID: []});
+    this.setState({snackID: []});
+
+    await this.getMeals();
+    this.getIdByMealName();
+    await this.getFoodForEachID();
+  }
   async login(){ //login the user
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", 'Basic ' + base64.encode(this.state.username + ":" + this.state.password));
-    console.log("this is the login function")
+
     var requestOptions = {
       method: 'GET',
       headers: myHeaders,
@@ -92,13 +230,17 @@ class App extends React.Component {
       let result = await response.json();
       this.setState({token: result.token});
       if(result.message === "Could not verify" || result.message === "\"username\" and/or \"password\" not found in auth"
-        || result.message ==="No auth found!" || result.message === "Could not verify"){
+        || result.message ==="No auth found!"){
         alert('Could not verify. Please try again.');
         return;
       } else {
         await this.userProfile(); // get the user information
         await this.getActivities(); // get user activities
         await this.getMeals(); // get user meals
+        this.getIdByMealName(); // need to get the IDs for each meal first
+        await this.getFoodForEachID(); // this method calls get foods for each meal id
+        // await this.getFoods(); // get user foods for each meal
+        this.setState({loggedIn: true});
       }
       if(result.message !== "Could not verify"){
         if( this.state.signup === true ){
@@ -147,11 +289,8 @@ class App extends React.Component {
   async newUser(){ //signup
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    console.log("APP: newUser function")
-    console.log(this.state.password)
-// console.log("APP: " + this.state.username + "  " + this.state.password);
     var raw = "{\n    \"username\": \"" + this.state.username + "\",\n    \"password\": \"" + this.state.password + "\"\n}";
-    console.log("raw")
+
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -173,41 +312,48 @@ class App extends React.Component {
 
   }
   goBackSignup(childData){
-    console.log(childData)
     this.setState({signupPage: childData});
-    console.log(this.state.signupPage)
   }
   removeUserInfo(){ // sign the user out.
     this.setState({token: ""});
     this.setState({username: ""});
     this.setState({password: ""});
+    this.setState({breakfastArray: []});
+    this.setState({lunchArray: []});
+    this.setState({dinnerArray: []});
+    this.setState({snackArray: []});
+    this.setState({breakfastID: []});
+    this.setState({lunchID: []});
+    this.setState({dinnerID: []});
+    this.setState({snackID: []});
   }
   changeView(){ //change the view to show the user profile
 
-    if(this.state.signupPage == true){
-      this.setState({signupPage: !this.state.signupPage});
-    }
+    // if(this.state.signupPage == true){ // I think this was for after creating an account, to go to the next screen -- dont need it
+    //   this.setState({signupPage: !this.state.signupPage});
+    // }
     this.setState({viewOne: !this.state.viewOne});
   }
   changeToSignup(){ // when the user presses the signup button -- bring them to the signup page
     this.setState({signupPage: !this.state.signupPage});
+    console.log("changeToSignup: " + this.state.signupPage);
   }
   setUsernameFromSignup(userData){
-// console.log("User " + userData)
     this.setState({username: userData});
-    console.log("Username state: " + this.state.username)
-
   }
   setPasswordFromSignup(passData){
-// console.log("Pass " + passData)
     this.setState({password: passData});
-    console.log("Password state: " + this.state.password)
   }
   signupPageComplete(){
     this.setState({signupPage: !this.state.signupPage});
   }
   userSignedUp(){
     this.setState({signup: true}); // account has successfully been created
+  }
+  initialDayView(){ //base case -- show user's info for today
+    var date = new Date().getDate();
+    this.setState({dayViewing: date});
+    console.log("date: " + this.state.dayViewing);
   }
   render() {
 
@@ -227,20 +373,20 @@ class App extends React.Component {
                 password = {this.state.password}
                 goBack = {this.goBack}
                 login = {this.login}
+                meals = {this.state.meals}
                 activities = {this.state.activities}
                 userProfile = {()=>this.userProfile()}
                 getActivities = {()=>this.getActivities()}
-                removeUserInfo = {()=>this.removeUserInfo()}/>
+                removeUserInfo = {()=>this.removeUserInfo()}
+                getMeals = {()=>this.getMeals()}
+                getFoods = {()=>this.getFoods()}
+                breakfastArray = {this.state.breakfastArray}
+                lunchArray = {this.state.lunchArray}
+                dinnerArray = {this.state.dinnerArray}
+                snackArray = {this.state.snackArray}
+                createMealModal = {()=>this.createMealModal()}/>
     }
     if(!this.state.signupPage){
-    /*  try{
-        let response = await fetch('https://mysqlcs639.cs.wisc.edu/users', requestOptions);
-        let result = await response.json();
-        this.setState({signup: true}); // account has successfully been created
-        this.login();
-      } catch {
-        console.log(error);
-      }*/
       return <Signup changeToSignup = {this.changeToSignup}
                 firstName = {this.state.firstName}
                 lastName = {this.state.lastName}
@@ -270,10 +416,10 @@ class App extends React.Component {
         backgroundColor: 'dodgerblue',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10,
+        padding: 15,
         borderRadius: 10,
         width: 100,
-        marginTop: 10
+        marginTop: 20
       },
       input: {
         width: 250,

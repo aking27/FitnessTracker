@@ -13,38 +13,40 @@ class Signup extends React.Component {
       confirmPass: ""
     }
   }
-  async newUser(){ //signup
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = "{\n    \"username\": \"" + this.state.username + "\",\n    \"password\": \"" + this.state.password + "\"\n}";
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
+  // async newUser(){ //signup
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
+  //   var raw = "{\n    \"username\": \"" + this.state.username + "\",\n    \"password\": \"" + this.state.password + "\"\n}";
+  //   var requestOptions = {
+  //     method: 'POST',
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: 'follow'
+  //   };
 
-    try{
-      let response = await fetch('https://mysqlcs639.cs.wisc.edu/users', requestOptions);
-      let result = await response.json();
+  //   try{
+  //     let response = await fetch('https://mysqlcs639.cs.wisc.edu/users', requestOptions);
+  //     let result = await response.json();
 
-      this.props.userSignedUp(); // get the created account alert
-      this.props.login(); // log the user in and get their information (in APP)
-    } catch {
-      console.log(error);
-    }
-  }
+  //     this.props.userSignedUp(); // get the created account alert
+  //     this.props.login(); // log the user in and get their information (in APP)
+  //   } catch {
+  //     console.log(error);
+  //   }
+  // }
   async comparePassword(){
-
-    if(this.state.confirmPass == this.state.password){
-      console.log("start compare password: " + this.state.signUser + "---" + this.state.signPass)
-      await this.sendUsername();
-      await this.sendPassword();
-      await this.props.newUser(); //TODO: still need to send the username and password to APP so that averything still works
-      console.log("end compare password")
+    if(this.state.confirmPass.length >= 5 || this.state.password.length >= 5 || this.state.username.length >= 5){
+      if(this.state.confirmPass == this.state.password){
+        await this.sendUsername();
+        await this.sendPassword();
+        await this.props.newUser();
+  
+      } else {
+        alert('Passwords don\'t match! Try again.');
+        return;
+      }
     } else {
-      alert('Passwords don\'t match! Try again.');
-      return;
+      alert('Username and passwords need to be at least 5 characters long. Try again.');
     }
   }
   sendUsername(){
@@ -84,7 +86,7 @@ class Signup extends React.Component {
         backgroundColor: 'red',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10,
+        padding: 15,
         borderRadius: 10,
         width: 100,
         marginTop: 10

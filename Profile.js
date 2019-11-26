@@ -37,7 +37,6 @@ class Profile extends React.Component {
       let result = await response.json();
       alert('Your account has been deleted.');
       this.profileGoBack();
-      // console.log("delete function");
     } catch {
       console.log(error);
     }
@@ -106,8 +105,26 @@ class Profile extends React.Component {
         alignItems: 'center',
         justifyContent: 'center',
         width: 150,
-        padding: 10,
+        padding: 15,
         borderRadius: 10,
+        marginTop: 30
+      },
+      settingsButton: {
+        backgroundColor: 'gray',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 150,
+        padding: 15,
+        borderRadius: 10,
+        marginTop: 30
+      },
+      backButton: {
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 15,
+        borderRadius: 10,
+        width: 150,
         marginTop: 30
       }
     });
@@ -128,7 +145,15 @@ class Profile extends React.Component {
                 username = {this.props.username}
                 token = {this.props.token}
                 password = {this.props.password}
-                mealScreenView = {()=>this.mealScreenView()}/>
+                mealScreenView = {()=>this.mealScreenView()}
+                getMeals = {()=>this.props.getMeals()}
+                meals = {this.props.meals}
+                getFoods = {()=>this.getFoods()}
+                breakfastArray = {this.props.breakfastArray}
+                lunchArray = {this.props.lunchArray}
+                dinnerArray = {this.props.dinnerArray}
+                snackArray = {this.props.snackArray}
+                createMealModal = {()=>this.props.createMealModal()}/>
     }
     return (
 
@@ -144,10 +169,10 @@ class Profile extends React.Component {
         <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Edit Information'} onPress={() => this.showModal()}/>
         <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Activity Hub'} onPress={() => this.activityScreenView()}/>
 
-        <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Meal Hub'} onPress={() => this.mealScreenView()} />
-        <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Account Settings'} onPress={() => this.showDeleteModal()}/>
+        <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Nutrition Hub'} onPress={() => this.mealScreenView()} />
+        <Button buttonStyle={styles.settingsButton} textStyle={{color: '#ffffff'}} text={'Account Settings'} onPress={() => this.showDeleteModal()}/>
 
-        <Button buttonStyle={{backgroundColor: 'red', alignItems: 'center', justifyContent: 'center', padding: 10, width: 150, borderRadius: 10, marginTop: 30}} textStyle={{color: '#ffffff'}} text={'Logout'} onPress={() => this.profileGoBack()}/>
+        <Button buttonStyle={styles.backButton} textStyle={{color: '#ffffff'}} text={'Logout'} onPress={() => this.profileGoBack()}/>
         <DeleteModal width={300} height={600} show={this.state.deleteModal} hideDeleteModal={() => this.hideDeleteModal()}
                   firstName = {this.props.firstName}
                   viewOne = {this.props.viewOne}
