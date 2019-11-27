@@ -25,7 +25,6 @@ class MealModal extends React.Component {
     myHeaders.append("Authorization", 'Basic ' + base64.encode(this.props.username + ":" + this.props.password));
 
     var raw = "{\n	\"name\": \"" + this.state.meal + "\"\n	\n}";
-    // var raw = "{\n	\"name\": \"" + this.state.meal + "\",\n	\"date\": \"Today\"\n	\n}";
 
     var requestOptions = {
       method: 'POST',
@@ -36,15 +35,9 @@ class MealModal extends React.Component {
     try{
         let response = await fetch('https://mysqlcs639.cs.wisc.edu/meals', requestOptions);
         let result = await response.json();
-        // {
-        //     "id": 177,
-        //     "message": "Meal created!"
-        // }
         this.setState({mealId: result.id}); // grab the meal id
         this.props.getMeals();
         this.props.thisMealId(this.state.mealId); // send the meal ID that was just created so that the food can be associated with this id
-        // this.props.hide(); // -- hide the modal after it is created and push the alert to the user
-        // alert('Meal Successfully Added!')
       } catch {
         alert(error);
     }
@@ -63,15 +56,9 @@ class MealModal extends React.Component {
       body: raw,
       redirect: 'follow'
     };
-    // {
-    //     "id": 159,
-    //     "message": "Food created!"
-    // }
     try{
         let response = await fetch('https://mysqlcs639.cs.wisc.edu/meals/' + this.state.mealId + '/foods', requestOptions);
-        let result = await response.json();
-        // await this.props.getMeals();
-        
+        let result = await response.json();        
         
         alert('Meal Successfully Added!');
         console.log(result)
@@ -89,15 +76,9 @@ class MealModal extends React.Component {
     await this.postFood();
     this.props.hide();
     await this.props.createMealModal();
-    // await this.props.createMealModal();
-    
-    console.log("createMeal function: " + this.props.hide)
-
-
   }
   mealChange(childData){ // after the meal has been selected, close the modal! -- may have to make this an ansynchonous function
     this.setState({meal: childData});
-    console.log(this.state.meal)
   }
   render() {
     const styles = StyleSheet.create({

@@ -166,7 +166,7 @@ class MealScreen extends React.Component {
     if(this.props.meals.length == 0){ // base case -- no activities added to user
       mealRows.push(<Text style={styles.mealHeader}>No meals posted</Text>);
     }
-    
+
     var day = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
     var year = new Date().getFullYear(); //Current Year
@@ -222,7 +222,7 @@ class MealScreen extends React.Component {
         
         <Text style={styles.todayTotals}>Today's Totals:</Text>
         <Text>{totalRows}</Text>
-        <MealDatePicker/>
+        {/* <MealDatePicker/> */}
         <Button buttonStyle={styles.mealButton} textStyle={{color: '#ffffff'}} text={'Breakfast View'} onPress={()=>this.showBreakfastModal()}/>
         <Button buttonStyle={styles.mealButton} textStyle={{color: '#ffffff'}} text={'Lunch View'} onPress={()=>this.showLunchModal()}/>
       
