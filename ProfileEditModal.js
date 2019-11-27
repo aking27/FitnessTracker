@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableWithoutFeedback, Dimensions, TextInput, StyleSheet } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, Dimensions, TextInput, StyleSheet, ScrollView } from 'react-native';
 import Button from './Button';
 import base64 from 'base-64';
 class ProfileEditModal extends React.Component {
@@ -71,9 +71,8 @@ class ProfileEditModal extends React.Component {
         fontSize: 25,
         fontFamily: 'GillSans-SemiBold',
         color: 'black',
-        marginTop: 60,
-        marginLeft: 10,
-        marginRight: 5
+        marginTop: 20,
+        textAlign: 'center'
       }
     });
 
@@ -87,7 +86,8 @@ class ProfileEditModal extends React.Component {
             </View>
           </TouchableWithoutFeedback>
           <View style={{position: 'absolute', width: this.props.width, height: this.props.height, left: (screenWidth - this.props.width)/2, top: (screenHeight - this.props.height)/2, backgroundColor: 'white', borderRadius: 10}}>
-            <Text style={styles.instructions}>Make your changes below</Text>
+            <ScrollView>
+            <Text style={styles.instructions}>Edit Profile</Text>
             <TextInput style={styles.input}  textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({profilefirstName: text})}
             placeholder= "Edit First Name"/>
             <TextInput style={styles.input}  textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({profilelastName: text})}
@@ -103,6 +103,7 @@ class ProfileEditModal extends React.Component {
             <TextInput style={styles.input}  textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({profilegoalDailyProtein: text})}
             placeholder= "Edit Daily Protein Goal (g)"/>
             <Button buttonStyle={{alignItems: 'center', justifyContent: 'center', backgroundColor: 'dodgerblue', padding: 10, borderRadius: 10, marginTop: 20, marginLeft: 20, marginRight: 20}} textStyle={{color: '#ffffff'}} text={'Save Changes'} onPress={() => this.editInformation()}/>
+            </ScrollView>
             <Button buttonStyle={{alignItems: 'center', justifyContent: 'center', width: 70, height: 70, position: 'absolute', right: 0}} textStyle={{fontSize: 25}} text={'✕'} onPress={() => this.props.hide()}/>
           </View>
         </View>

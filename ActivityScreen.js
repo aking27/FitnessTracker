@@ -110,7 +110,7 @@ class ActivityScreen extends React.Component {
         }
     }
     if(this.props.activities.length == 0){ // base case -- no activities added to user
-      activityRows.push(<Text style={styles.activityHeader}>No exercises posted</Text>);
+      activityRows.push(<Text style={styles.activityHeader}>No Exercises Have Been Posted!{"\n"}</Text>);
     }
 
     function getParsedDate(date){ // parse the date
@@ -123,7 +123,7 @@ class ActivityScreen extends React.Component {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#4E5851'}}>
         <Text style={styles.welcome}>Activity Hub</Text>
-        <Text style={styles.activityBox}>{activityRows}</Text>
+        <Text>{activityRows}</Text>
         <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Add Activity'} onPress={() => this.showModal()}/>
         {/* <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Edit Entries'} onPress={() => this.showEditModal()}/> */}
         <Button buttonStyle={styles.backButton} textStyle={{color: '#ffffff'}} text={'Go Back'} onPress={() => this.activityGoBack()}/>

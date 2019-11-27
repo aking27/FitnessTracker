@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableWithoutFeedback, Dimensions, TextInput, StyleSheet, Picker } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, Dimensions, TextInput, StyleSheet, Picker, ScrollView } from 'react-native';
 import base64 from 'base-64';
 import Button from './Button';
 import MealPicker from './MealPicker'
@@ -152,19 +152,24 @@ class MealModal extends React.Component {
             </View>
           </TouchableWithoutFeedback>
           <View style={{position: 'absolute', width: this.props.width, height: this.props.height, left: (screenWidth - this.props.width)/2, top: (screenHeight - this.props.height)/2, backgroundColor: 'white', borderRadius: 10, marginTop: -180}}>
-            <Text style={styles.instructions}>Enter Meal</Text>
-            <MealPicker mealChange = {this.mealChange}/>
-            <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({foodName: text})}
-            placeholder= "Food Name"/>
-            <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({calories: text})}
-            placeholder= "Calories"/>
-            <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({carbohydrates: text})}
-            placeholder= "Carbohydrates (g)"/>
-            <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({fat: text})}
-            placeholder= "Fat (g)"/>
-            <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({protein: text})}
-            placeholder= "Protein (g)"/>
-            <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add Meal'} onPress={()=>this.createMeal()}/>
+            {/* <View style={{flex:1}}> */}
+            <ScrollView>
+              <Text style={styles.instructions}>Enter Meal</Text>
+              <MealPicker mealChange = {this.mealChange}/>
+              <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({foodName: text})}
+              placeholder= "Food Name"/>
+              <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({calories: text})}
+              placeholder= "Calories"/>
+              <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({carbohydrates: text})}
+              placeholder= "Carbohydrates (g)"/>
+              <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({fat: text})}
+              placeholder= "Fat (g)"/>
+              <TextInput style={styles.input} textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({protein: text})}
+              placeholder= "Protein (g)"/>
+              <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add Meal'} onPress={()=>this.createMeal()}/>
+              
+            </ScrollView>
+            {/* </View> */}
             <Button buttonStyle={styles.closeButton} textStyle={{fontSize: 25}} text={'✕'} onPress={() => this.props.hide()}/>
           </View>
         </View>

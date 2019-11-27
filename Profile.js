@@ -6,6 +6,11 @@ import ProfileEditModal from './ProfileEditModal';
 import ActivityScreen from './ActivityScreen';
 import MealScreen from './MealScreen';
 import DeleteModal from './DeleteModal';
+import ProgressModal from './ProgressModal';
+// import {Navigation} from 'react-native-navigation';
+// import { createAppContainer } from 'react-navigation';
+// import { createBottomTabNavigator } from 'react-navigation-tabs';
+// import Screens from './screens';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -15,7 +20,8 @@ class Profile extends React.Component {
       showActivityModal: false,
       activityScreen: true,
       mealScreen: true,
-      deleteModal: false
+      deleteModal: false,
+      showProgressModal: false
     }
   }
   async deleteUser(){
@@ -47,6 +53,13 @@ class Profile extends React.Component {
 
   hideModal() {
     this.setState({showModal: false});
+  }
+  showProgressModal() {
+    this.setState({showProgressModal: true});
+  }
+
+  hideProgressModal() {
+    this.setState({showProgressModal: false});
   }
   showActivityModal() {
     this.setState({showActivityModal: true});
@@ -85,20 +98,21 @@ class Profile extends React.Component {
         top: 50
       },
       profileHeader: {
-        fontSize: 30,
+        fontSize: 35,
         fontFamily: 'GillSans',
         color: 'white',
-        marginBottom: 10
+        marginBottom: 35
       },
       profileInformation: {
         fontSize: 20,
         fontFamily: 'GillSans',
         color: 'white'
       },
-      name: {
+      goals: {
         fontSize: 20,
         fontFamily: 'GillSans-SemiBold',
-        color: 'white'
+        color: 'white',
+        marginBottom: 2
       },
       buttons: {
         backgroundColor: 'dodgerblue',
@@ -110,7 +124,7 @@ class Profile extends React.Component {
         marginTop: 30
       },
       settingsButton: {
-        backgroundColor: 'gray',
+        backgroundColor: 'dimgray',
         alignItems: 'center',
         justifyContent: 'center',
         width: 150,
@@ -155,26 +169,39 @@ class Profile extends React.Component {
                 snackArray = {this.props.snackArray}
                 createMealModal = {()=>this.props.createMealModal()}/>
     }
+
+
     return (
 
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#4E5851'}}>
-        <Text style={styles.welcome}>Welcome, {this.props.firstName}!</Text>
-        <Text style={styles.profileHeader}>Your Daily Goals:</Text>
-        <Text style={styles.name}>{this.props.firstName} {this.props.lastName}</Text>
+        <Text style={styles.welcome}>Fitness Tracker</Text>
+        <Text style={styles.profileHeader}>Hi, {this.props.firstName}!</Text>
+        <Text style={styles.goals}>Your Daily Goals:</Text>
         <Text style={styles.profileInformation}>Active Minutes: {this.props.goalDailyActivity}</Text>
         <Text style={styles.profileInformation}>Calorie Goal: {this.props.goalDailyCalories}</Text>
         <Text style={styles.profileInformation}>Carbohydrates Goal: {this.props.goalDailyCarbohydrates}g</Text>
         <Text style={styles.profileInformation}>Fat Goal: {this.props.goalDailyFat}g</Text>
         <Text style={styles.profileInformation}>Protein Goal: {this.props.goalDailyProtein}g</Text>
-        <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Edit Information'} onPress={() => this.showModal()}/>
+
+        <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Edit Profile'} onPress={() => this.showModal()}/>
         <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Activity Hub'} onPress={() => this.activityScreenView()}/>
 
         <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Nutrition Hub'} onPress={() => this.mealScreenView()} />
-        <Button buttonStyle={styles.settingsButton} textStyle={{color: '#ffffff'}} text={'Account Settings'} onPress={() => this.showDeleteModal()}/>
+        <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'View Progress'} onPress={() => this.showProgressModal()} />
+        <Button buttonStyle={styles.settingsButton} textStyle={{color: '#ffffff'}} text={'Settings'} onPress={() => this.showDeleteModal()}/>
 
         <Button buttonStyle={styles.backButton} textStyle={{color: '#ffffff'}} text={'Logout'} onPress={() => this.profileGoBack()}/>
+        <ProgressModal width={300} height={600} show={this.state.showProgressModal} hideDeleteModal={() => this.hideProgressModal()}
+                  firstName = {this.props.firstName}
+                  lastName = {this.props.lastName}
+                  breakfastArray = {this.props.breakfastArray}
+                  lunchArray = {this.props.lunchArray}
+                  dinnerArray = {this.props.dinnerArray}
+                  snackArray = {this.props.snackArray}
+                  activities = {this.props.activities}/>
         <DeleteModal width={300} height={600} show={this.state.deleteModal} hideDeleteModal={() => this.hideDeleteModal()}
                   firstName = {this.props.firstName}
+                  lastName = {this.props.lastName}
                   viewOne = {this.props.viewOne}
                   username = {this.props.username}
                   token = {this.props.token}
@@ -194,9 +221,12 @@ class Profile extends React.Component {
                   password = {this.props.password}
                   login = {this.props.login}
                   userProfile = {()=> this.props.userProfile()}/>
+                  
       </View>
     )
   }
 }
 
 export default Profile;
+
+

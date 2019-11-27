@@ -7,6 +7,7 @@ import BreakfastModal from './BreakfastModal'
 import LunchModal from './LunchModal'
 import DinnerModal from './DinnerModal'
 import SnackModal from './SnackModal'
+import MealDatePicker from './MealDatePicker'
 
 class MealScreen extends React.Component {
   constructor(props) {
@@ -144,7 +145,7 @@ class MealScreen extends React.Component {
         padding: 15, 
         width: 150, 
         borderRadius: 10, 
-        marginTop: 15, 
+        marginTop: 30, 
         marginBottom: 40
       }
     });
@@ -215,7 +216,7 @@ class MealScreen extends React.Component {
       totalRows.push(<Text style={styles.mealInformation}>Fat: {fatTotal} (g){"\n"}</Text>);
       totalRows.push(<Text style={styles.mealInformation}>Protein: {proteinTotal} (g)</Text>);
     } else {
-      totalRows.push(<Text style={styles.mealInformation}>{"\n"}No Food Has Been Posted!{"\n"}</Text>)
+      totalRows.push(<Text style={styles.mealInformation}>{"\n"}No Foods Have Been Posted!{"\n"}</Text>)
     }
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#4E5851'}}>
@@ -223,7 +224,12 @@ class MealScreen extends React.Component {
         <Text style={styles.dayView}>Daily Meal Summary</Text>
         <Text style={styles.date}>{month} / {day} / {year}</Text>
 
+
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'top', marginTop: 180}}>
+        
+        <Text style={styles.todayTotals}>Today's Totals:</Text>
+        <Text>{totalRows}</Text>
+        <MealDatePicker/>
         <Button buttonStyle={styles.mealButton} textStyle={{color: '#ffffff'}} text={'Breakfast View'} onPress={()=>this.showBreakfastModal()}/>
         <Button buttonStyle={styles.mealButton} textStyle={{color: '#ffffff'}} text={'Lunch View'} onPress={()=>this.showLunchModal()}/>
       
@@ -231,10 +237,11 @@ class MealScreen extends React.Component {
         <Button buttonStyle={styles.mealButton} textStyle={{color: '#ffffff'}} text={'Snack View'} onPress={()=>this.showSnackModal()}/>
         
 
-        <Text style={styles.todayTotals}>Today's Totals:</Text>
-        <Text>{totalRows}</Text>
+
         
         <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Add Meal'} onPress={() => this.showModal()}/>
+        {/* <Button buttonStyle={styles.buttons} textStyle={{color: '#ffffff'}} text={'Edit Meal'} onPress={() => this.showModal()}/> */}
+        
         <Button buttonStyle={styles.backButton} textStyle={{color: '#ffffff'}} text={'Go Back'} onPress={() => this.mealGoBack()}/>
         <MealModal width={300} height={600} show={this.state.showModal} hide={() => this.hideModal()}
                   firstName = {this.props.firstName}
@@ -286,7 +293,8 @@ class MealScreen extends React.Component {
                   getMeals = {()=>this.props.getMeals()}
                   meals = {this.props.meals}
                   thisMealId = {this.thisMealId}
-                  snackArray = {this.props.snackArray}/>   
+                  snackArray = {this.props.snackArray}/> 
+                    
         </View>
       </View>
     )

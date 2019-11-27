@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableWithoutFeedback, Dimensions, TextInput, StyleSheet } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, Dimensions, TextInput, StyleSheet, ScrollView } from 'react-native';
 import base64 from 'base-64';
 import Button from './Button';
 import ActivityPicker from './ActivityPicker'
@@ -69,7 +69,7 @@ class ActivityModal extends React.Component {
           fontSize: 25,
           fontFamily: 'GillSans-SemiBold',
           color: 'black',
-          marginTop: 60,
+          marginTop: 20,
           textAlign: 'center'
         },
         input: {
@@ -91,12 +91,14 @@ class ActivityModal extends React.Component {
 
       return (
         <View style={{position: 'absolute'}}>
+          
           <TouchableWithoutFeedback onPress={() => this.props.hide()}>
             <View style={{width: screenWidth, height: screenHeight, backgroundColor: 'black', opacity: 0.75}}>
             </View>
           </TouchableWithoutFeedback>
           <View style={{position: 'absolute', width: this.props.width, height: this.props.height, left: (screenWidth - this.props.width)/2, top: (screenHeight - this.props.height)/2, backgroundColor: 'white', borderRadius: 10}}>
-            <Text style={styles.instructions}>Enter the fields below and press the corresponding exercise</Text>
+          <ScrollView>
+            <Text style={styles.instructions}>Enter Exercise</Text>
 
             <TextInput style={styles.input}  textStyle={{color: '#FFFFFF'}} placeholderTextColor={'#949494'} onChangeText={(text) => this.setState({caloriesInput: text})}
             placeholder= "Calories Burned"/>
@@ -104,6 +106,9 @@ class ActivityModal extends React.Component {
             placeholder= "Duration of Exercise (min.)"/>
             <ActivityPicker changeActivity = {this.changeActivity}/>
             <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Add Activity'} onPress={() => this.postActivities()}/>
+            
+            </ScrollView>
+            <Button buttonStyle={styles.closeButton} textStyle={{fontSize: 25}} text={'✕'} onPress={() => this.props.hide()}/>
           </View>
         </View>
       )

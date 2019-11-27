@@ -40,7 +40,7 @@ class DeleteModal extends React.Component {
           fontSize: 25,
           fontFamily: 'GillSans-SemiBold',
           color: 'black',
-          marginTop: 60,
+          marginTop: 20,
           textAlign: 'center'
         },
         input: {
@@ -53,6 +53,13 @@ class DeleteModal extends React.Component {
           padding: 10,
           marginLeft: 20,
           marginRight: 20
+        },
+        profileInformation: {
+          fontSize: 20,
+          fontFamily: 'GillSans',
+          color: 'black',
+          textAlign: 'center',
+          marginTop: 10
         }
     });
 
@@ -67,7 +74,8 @@ class DeleteModal extends React.Component {
             </View>
           </TouchableWithoutFeedback>
           <View style={{position: 'absolute', width: this.props.width, height: this.props.height, left: (screenWidth - this.props.width)/2, top: (screenHeight - this.props.height)/2, backgroundColor: 'white', borderRadius: 10}}>
-            <Text style={styles.instructions}>Account Settings</Text>
+            <Text style={styles.instructions}>Settings</Text>
+            <Text style={styles.profileInformation}>{this.props.firstName} {this.props.lastName}'s Account</Text>
             <Button buttonStyle={styles.button} textStyle={{color: '#ffffff'}} text={'Delete Account'} onPress={() => this.props.deleteUser()}/>
 
             <Button buttonStyle={styles.closeButton} textStyle={{fontSize: 25}} text={'✕'} onPress={() => this.props.hideDeleteModal()}/>

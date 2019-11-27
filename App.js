@@ -1,9 +1,12 @@
 import React from 'react';
 import { View, TextInput, StyleSheet, Text, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import Button from './Button';
 import base64 from 'base-64';
 import Profile from './Profile';
 import Signup from './Signup';
+import { createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 class App extends React.Component {
   constructor(props) {
