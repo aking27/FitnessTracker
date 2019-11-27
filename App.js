@@ -71,20 +71,6 @@ class App extends React.Component {
       console.log(error);
     }
   }
-//   {    ---- get the information from meals -- id is pretty important -- maybe an array? -- concat
-//     "meals": [
-//         {
-//             "date": "2019-11-23T22:30:03.746351",
-//             "id": 163,
-//             "name": "Snack"
-//         },
-//         {
-//             "date": "2019-11-23T23:54:28.267410",
-//             "id": 177,
-//             "name": "Breakfast"
-//         }
-//     ]
-// }
   async getMeals(){ //get user meals
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -126,22 +112,13 @@ class App extends React.Component {
     try{
       let response = await fetch('https://mysqlcs639.cs.wisc.edu/meals/' + this.state.currMealID + '/foods', requestOptions);
       let result = await response.json();
-      // console.log(result.foods);
-      if(this.state.concatBreakfast){ // need to clear the array contents before concatenating them -- array just keeps getting bigger
-        // this.setState({breakfastArray: []}); // need to reset the array to be populated again
+      if(this.state.concatBreakfast){
         this.setState({breakfastArray: this.state.breakfastArray.concat(result.foods)});
       } else if (this.state.concatLunch) {
-        // this.setState({lunchArray: []});
         this.setState({lunchArray: this.state.lunchArray.concat(result.foods)});
       } else if (this.state.concatDinner) {
-        // this.setState({dinnerArray: []});
         this.setState({dinnerArray: this.state.dinnerArray.concat(result.foods)});
       } else if (this.state.concatSnack) {
-        // this.setState({snackArray: []});
-        // console.log("Result");
-        
-        // console.log("array");
-        // console.log(this.state.snackArray);
         this.setState({snackArray: this.state.snackArray.concat(result.foods)});
       }
       
@@ -154,7 +131,6 @@ class App extends React.Component {
       if(this.state.meals[i].name == "Breakfast"){ //then grab the ID
         this.setState({breakfastID: this.state.breakfastID.concat(this.state.meals[i].id)});
       } else if (this.state.meals[i].name == "Lunch"){
-        // console.log("getIdbymealname")
         this.setState({lunchID: this.state.lunchID.concat(this.state.meals[i].id)});
       } else if (this.state.meals[i].name == "Dinner"){
         this.setState({dinnerID: this.state.dinnerID.concat(this.state.meals[i].id)});
@@ -179,7 +155,7 @@ class App extends React.Component {
       this.setState({concatLunch: true});
       this.setState({concatDinner: false});
       this.setState({concatSnack: false});
-      // console.log("lunch loop: " + this.state.lunchID[i])
+
       this.setState({currMealID: this.state.lunchID[i]});
       await this.getFoods();
     }
@@ -242,14 +218,11 @@ class App extends React.Component {
         await this.getMeals(); // get user meals
         this.getIdByMealName(); // need to get the IDs for each meal first
         await this.getFoodForEachID(); // this method calls get foods for each meal id
-        // await this.getFoods(); // get user foods for each meal
         this.setState({loggedIn: true});
       }
       if(result.message !== "Could not verify"){
         if( this.state.signup === true ){
           alert('You have created an account!');
-        } else {
-          // alert('You are logged in!');
         }
         this.changeView();
       } else {
@@ -331,15 +304,10 @@ class App extends React.Component {
     this.setState({snackID: []});
   }
   changeView(){ //change the view to show the user profile
-
-    // if(this.state.signupPage == true){ // I think this was for after creating an account, to go to the next screen -- dont need it
-    //   this.setState({signupPage: !this.state.signupPage});
-    // }
     this.setState({viewOne: !this.state.viewOne});
   }
   changeToSignup(){ // when the user presses the signup button -- bring them to the signup page
     this.setState({signupPage: !this.state.signupPage});
-    console.log("changeToSignup: " + this.state.signupPage);
   }
   setUsernameFromSignup(userData){
     this.setState({username: userData});
@@ -356,7 +324,6 @@ class App extends React.Component {
   initialDayView(){ //base case -- show user's info for today
     var date = new Date().getDate();
     this.setState({dayViewing: date});
-    console.log("date: " + this.state.dayViewing);
   }
   render() {
 

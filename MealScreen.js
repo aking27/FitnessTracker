@@ -166,13 +166,6 @@ class MealScreen extends React.Component {
     if(this.props.meals.length == 0){ // base case -- no activities added to user
       mealRows.push(<Text style={styles.mealHeader}>No meals posted</Text>);
     }
-
-    // function getParsedDate(date){ // parse the date
-    //   date = String(date).split('T');
-    //   var days = String(date[0]).split('-');
-    //   var hours = String(date[1]).split(':');
-    //   return [parseInt(days[1]), parseInt("-" + days[2]), parseInt("-" + days[0])]; //, parseInt(hours[0]), parseInt(hours[1]), parseInt(hours[2])
-    // }
     
     var day = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
