@@ -23,7 +23,7 @@ class App extends React.Component {
       goalDailyCarbohydrates: "",
       goalDailyFat: "",
       goalDailyProtein: "",
-      viewOne: false, // Profile View
+      viewOne: true, // Profile View
       activities: [],
       meals: [],
       signupPage: true,
